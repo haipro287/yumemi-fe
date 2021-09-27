@@ -19,6 +19,8 @@ module.exports = {
         jest: true,
     },
     rules: {
+        "no-plusplus": 0,
+        "no-bitwise": 0,
         "no-debugger": 0,
         "no-alert": 0,
         "no-await-in-loop": 0,
@@ -145,6 +147,9 @@ module.exports = {
                 argsIgnorePattern: "res|next|^err",
             },
         ],
+        "no-use-before-define": "off",
+        "@typescript-eslint/restrict-plus-operands": 0,
+        "@typescript-eslint/no-use-before-define": ["warn"],
         "@typescript-eslint/return-await": "off",
         "@typescript-eslint/semi": "off",
         "@typescript-eslint/camelcase": "off",
