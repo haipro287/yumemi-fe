@@ -1,61 +1,100 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../../styles/Home.module.scss'
+import { useEffect, useState } from 'react'
+import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { customAxios } from '@utils/custom-axios'
+import styles from './Home.module.scss'
+
+interface IPrefecture {
+  prefCode: number
+  prefName: string
+}
+
+const genColor = string => {
+  let hash = 0
+  for (let i = 0; i < string.length; i++) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  let color = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff
+    color += `00${value.toString(16)}`.substr(-2)
+  }
+  return color
+}
 
 export default function Home() {
+  const initData = () => {
+    const years = []
+    for (let i = 1965; i <= 2015; i += 5) {
+      years.push({ year: i })
+    }
+    return years
+  }
+
+  const fetchPrefs = () => {
+    customAxios
+      .get('/api/prefectures')
+      .then(r => {
+        setPrefs(r.data.result)
+      })
+      .catch(err => console.log(err))
+  }
+
+  const fetchData = prefIndex => {
+    customAxios
+      .get(`/api/population?prefCode=${prefs[prefIndex].prefCode}`)
+      .then(r => {
+        setData(data.map((v, i) => ({ ...v, [prefs[prefIndex].prefName]: r.data.result[i] })))
+      })
+      .catch(err => console.log(err))
+  }
+
+  const [prefs, setPrefs] = useState<IPrefecture[]>([])
+  const [selectedPrefs, setSelectedPrefs] = useState<number[]>([])
+  const [data, setData] = useState(initData)
+
+  const handleCheckbox = event => {
+    const found = selectedPrefs.find(e => e === event.target.value)
+    console.log(found)
+    if (found === undefined) {
+      setSelectedPrefs([...selectedPrefs, event.target.value])
+      fetchData(event.target.value)
+    } else {
+      setSelectedPrefs(selectedPrefs.filter(p => p !== event.target.value))
+    }
+  }
+
+  useEffect(fetchPrefs, [])
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Yumemi FE</title>
-        <meta name='description' content='Powered by haipro287' />
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href='https://nextjs.org'>Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href='https://nextjs.org/docs' className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href='https://nextjs.org/learn' className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a href='https://github.com/vercel/next.js/tree/master/examples' className={styles.card}>
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-            className={styles.card}>
-            <h2>Deploy &rarr;</h2>
-            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'>
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src='/vercel.svg' alt='Vercel Logo' width={72} height={16} />
-          </span>
-        </a>
-      </footer>
+    <div className={styles.home}>
+      都道府県
+      <div className={styles.grid}>
+        {prefs.map((p, i) => (
+          <div className={styles.grid__item} key={p.prefCode}>
+            <input className={styles.checkbox} type='checkbox' onChange={handleCheckbox} value={i} />
+            {p.prefName}
+          </div>
+        ))}
+      </div>
+      <div className={styles.chart}>
+        <ResponsiveContainer width='100%' height='100%'>
+          <LineChart width={750} height={250} data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <XAxis dataKey='year' />
+            <YAxis />
+            <Tooltip />
+            <Legend verticalAlign='bottom' height={36} />
+            {selectedPrefs.map(p => (
+              <Line
+                type='monotone'
+                dataKey={prefs[p].prefName}
+                stroke={genColor(prefs[p].prefName)}
+                isAnimationActive
+                animationDuration={2000}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 }
