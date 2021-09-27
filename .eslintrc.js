@@ -159,6 +159,7 @@ module.exports = {
         "react/jsx-props-no-spreading": 0,
         "react/prop-types": 0,
         "@typescript-eslint/no-unsafe-call": 0,
+        "@typescript-eslint/no-unsafe-return": 0,
         "import/no-extraneous-dependencies": 0,
     },
     plugins: ["html", "prettier", "react-hooks", "@typescript-eslint"],
