@@ -14,5 +14,19 @@
 }
 
 .title {
-  font-size: 2em;
+  font-size: $title-size;
+  text-align: center;
+}
+
+@media (max-width: $small) {
+  .header {
+    min-height: $header-height-small;
+  }
+}
+
+@media (max-width: $small) {
+  .title {
+    font-size: $title-size-small;
+    text-align: center;
+  }
 }

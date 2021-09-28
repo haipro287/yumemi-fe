@@ -76,13 +76,13 @@ export default function Home() {
           </div>
         ))}
       </div>
-      <div className={styles.chart}>
-        <ResponsiveContainer width='100%' height='100%'>
+      <div className={styles.chart} style={{ height: `${selectedPrefs.length * 3}vh` }}>
+        <ResponsiveContainer minWidth='100%' minHeight='100%'>
           <LineChart width={750} height={250} data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <XAxis dataKey='year' />
             <YAxis />
             <Tooltip />
-            <Legend verticalAlign='bottom' height={36} />
+            <Legend verticalAlign='bottom' />
             {selectedPrefs.map(p => (
               <Line
                 type='monotone'
