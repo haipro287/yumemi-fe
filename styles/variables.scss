@@ -1,5 +1,26 @@
 $header-height: 80px;
-$footer-height: 60px;
+$header-height-small: 10vh;
+
+$home-margin-top: 5vh;
+$home-margin-top-large: $header-height;
+
+$checkbox-scale: scale(1.5);
+
+$footer-height: 80px;
 
 $primary-color: #000;
 $secondary-color: #fff;
+
+$chart-height: 400px;
+$chart-width: 800px;
+$chart-margin-top: 2rem;
+
+$title-size: 2em;
+$title-size-small: 15vw;
+
+$footer-line: 1px solid #eaeaea;
+
+$impossible: 150px;
+$small: 200px;
+$medium: 600px;
+$large: 800px;
