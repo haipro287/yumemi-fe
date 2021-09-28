@@ -3,11 +3,13 @@
 .home {
   width: 100%;
   margin-top: $home-margin-top;
+  margin-bottom: $home-margin-top;
 }
 
 @media (min-width: $large) {
   .home {
     margin-top: $home-margin-top-large;
+    margin-bottom: $home-margin-top-large;
   }
 }
 
