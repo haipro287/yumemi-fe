@@ -1,0 +1,85 @@
+@import "styles/variables";
+
+.checkbox {
+  label {
+    display: flex;
+    align-items: center;
+    color: $primary-color;
+    position: relative;
+  }
+
+  @media (max-width: $small) {
+    label > span {
+      margin-right: 1vw;
+    }
+  }
+
+  input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  label > span {
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid $primary-color;
+    margin-right: 1vw;
+    border-radius: 3px;
+    transition: all .3s;
+  }
+
+  input:checked + label > span {
+    border: 10px solid $primary-color;
+    animation: bounce 250ms;
+  }
+
+  input:checked + label > span::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    transform: rotate(45deg);
+    transform-origin: center;
+    animation: checked-box 125ms 250ms forwards;
+  }
+
+  @keyframes checked-box {
+    0% {
+      margin-top: 2px;
+      width: 0;
+      height: 0;
+      border-color: $secondary-color;
+      transform: translate(0, 0) rotate(45deg);
+    }
+    33% {
+      margin-top: 2px;
+      width: 4px;
+      height: 0;
+      border-color: $secondary-color;
+      transform: translate(0, 0) rotate(45deg);
+    }
+    100% {
+      margin-top: 2px;
+      width: 4px;
+      height: 8px;
+      border-color: $secondary-color;
+      transform: translate(0, -8px) rotate(45deg);
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      transform: scale(1);
+    }
+    33% {
+      transform: scale(.7);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
