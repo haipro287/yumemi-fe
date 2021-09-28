@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { customAxios } from '@utils/custom-axios'
+import Checkbox from '@components/checkbox/Checkbox'
 import styles from './Home.module.scss'
 
-interface IPrefecture {
+export interface Prefecture {
   prefCode: number
   prefName: string
 }
@@ -48,7 +49,7 @@ export default function Home() {
       .catch(err => console.log(err))
   }
 
-  const [prefs, setPrefs] = useState<IPrefecture[]>([])
+  const [prefs, setPrefs] = useState<Prefecture[]>([])
   const [selectedPrefs, setSelectedPrefs] = useState<number[]>([])
   const [data, setData] = useState(initData)
 
@@ -71,8 +72,7 @@ export default function Home() {
       <div className={styles.grid}>
         {prefs.map((p, i) => (
           <div className={styles.grid__item} key={p.prefCode}>
-            <input className={styles.checkbox} type='checkbox' onChange={handleCheckbox} value={i} />
-            {p.prefName}
+            <Checkbox id={i} pref={p} handle={handleCheckbox} />
           </div>
         ))}
       </div>
