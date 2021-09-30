@@ -55,7 +55,6 @@ export default function Home() {
 
   const handleCheckbox = event => {
     const found = selectedPrefs.find(e => e === event.target.value)
-    console.log(found)
     if (found === undefined) {
       setSelectedPrefs([...selectedPrefs, event.target.value])
       fetchData(event.target.value)
